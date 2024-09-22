@@ -1,14 +1,12 @@
-
- .Header {
+.Header {
   border-bottom: 1px solid #DDDDDD;
+  will-change: background-color;
+
 }
 
-
-.Header:hover{
-  background-color:#F1F3F4;
- 
+.Header:hover {
+  background-color: #F1F3F4;
 }
-
 
 .headerContent {
   display: flex;
@@ -19,7 +17,8 @@
 
 .logo {
   flex-shrink: 0;
-  
+  object-fit: contain;
+
 }
 
 .navBlock ul {
@@ -51,7 +50,7 @@
   position: absolute;
   top: 8px;
   right: 20px;
-  background-color:#0D50FF;
+  background-color: #0D50FF;
   color: #FFFFFF;
   border-radius: 50%;
   width: 26px;
@@ -63,10 +62,8 @@
   font-weight: 600;
 }
 
-
- @media (max-width: 768px) {
+@media (max-width: 768px) {
   .headerContent {
-  
     height: auto;
     padding: 20px 0;
   }
@@ -75,33 +72,37 @@
     flex-direction: column;
     align-items: start;
     gap: 16px;
+    min-height: 100px;
+
   }
 
   .navLink a {
     font-size: 14px;
     padding: 8px 0;
   }
- 
-    .burgerMenu {
-  margin-left: -130px;
-    }
-  
+
+  .burgerMenu {
+    transform: translateX(-100px);
+
+  }
 }
 
 @media (max-width: 490px) {
   .navLink a {
-    font-size: 6px;
-  }
-}   
+    font-size: 0.9rem;
 
- 
+  }
+}
+
 .burgerMenu {
   display: none;
   flex-direction: column;
   cursor: pointer;
   gap: 4px;
-  margin-left: -100px;
-  
+  transform: translateX(-100px);
+
+  transition: transform 0.3s;
+
 }
 
 .burgerLine {
@@ -133,15 +134,13 @@
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    position: absolute; 
-    top: 94px; 
+    position: absolute;
+    top: 94px;
     left: 0;
     right: 0;
     background-color: #fff;
     padding: 10px 0;
     z-index: 1000;
-    /* border: 1px solid #DDDDDD; */
-   
   }
 
   .navBlock.open ul {
@@ -152,14 +151,18 @@
     display: flex;
   }
 }
+
+
 @media (max-width: 400px) {
   .burgerMenu {
-margin-left: 50px;
+    transform: translateX(50px);
+
   }
 }
 
 @media (max-width: 300px) {
   .burgerMenu {
-margin-left: 50px;
+    transform: translateX(50px);
+
   }
 }
