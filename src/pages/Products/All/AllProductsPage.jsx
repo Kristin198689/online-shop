@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
 import ProductCard from "../../../components/ProductCard/ProductCard";
 import Filter from "../../../components/FilterContainer/Filter/Filter";
 import DiscountedItems from "../../../components/FilterContainer/DiscountedItems/DiscountedItems";
@@ -12,7 +12,9 @@ import styles from "./AllProductsPage.module.css";
 function AllProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
-  const [sortType, setSortType] = useState(searchParams.get("sortType") || "default");
+  const [sortType, setSortType] = useState(
+    searchParams.get("sortType") || "default"
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -22,7 +24,7 @@ function AllProductsPage() {
       setError(null);
 
       try {
-        const response = await axios.get("https://pet-shop-backend.slavab.kz/products/all");
+        const response = await axios.get("localhost:3333/products/all");
         setProducts(response.data);
       } catch (error) {
         console.error(error);
@@ -72,35 +74,49 @@ function AllProductsPage() {
   };
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return (
-    <div style={{
-      color: 'red',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginTop: '50px'
-    }}>
-      {error}
-    </div>
-  );
+  if (error)
+    return (
+      <div
+        style={{
+          color: "red",
+          fontWeight: "bold",
+          textAlign: "center",
+          marginTop: "50px",
+        }}
+      >
+        {error}
+      </div>
+    );
 
   return (
     <div className="globalContainer">
       <div className={styles.allProductsPage}>
         <Breadcrumbs
           items={[
-            { path: '/', label: 'Main page' },
-            { path: '/categories', label: 'All products', isActive: true }
+            { path: "/", label: "Main page" },
+            { path: "/categories", label: "All products", isActive: true },
           ]}
         />
         <div className={styles.categoriesPageTitle}>
           <h2>All products</h2>
         </div>
         <div className={styles.filterContainer}>
-          <Filter searchParams={searchParams} setSearchParams={setSearchParams} />
-          <DiscountedItems searchParams={searchParams} setSearchParams={setSearchParams} />
+          <Filter
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
+          <DiscountedItems
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
           <div className={styles.selectSort}>
             <span className={styles.sortTitle}>Sorted</span>
-            <SelectSort sortType={sortType} setSortType={setSortType} searchParams={searchParams} setSearchParams={setSearchParams} />
+            <SelectSort
+              sortType={sortType}
+              setSortType={setSortType}
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+            />
           </div>
         </div>
         <div className={styles.productsContainer}>

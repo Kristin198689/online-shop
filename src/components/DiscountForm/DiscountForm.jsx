@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { openModal, closeModal } from '../../redux/modalSlice';
-import GetDiscountButton from '../Buttons/GetDiscountButton/GetDiscountButton';
-import styles from './DiscountForm.module.css';
-import discountImage from '../../assets/images/pets.png';
+import React, { useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { openModal, closeModal } from "../../redux/modalSlice";
+import GetDiscountButton from "../Buttons/GetDiscountButton/GetDiscountButton";
+import styles from "./DiscountForm.module.css";
+import discountImage from "../../assets/images/pets.png";
 
 function DiscountForm() {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const dispatch = useDispatch();
@@ -24,27 +24,30 @@ function DiscountForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('https://pet-shop-backend.slavab.kz/sale/send', {
+      const response = await axios.post("localhost:3333/sale/send", {
         name,
         phone,
         email,
       });
 
       if (response.status === 200) {
-        dispatch(openModal({
-          title: 'Success',
-          content: [
-            'Your request has been submitted successfully!',
-          ],
-        }));
+        dispatch(
+          openModal({
+            title: "Success",
+            content: ["Your request has been submitted successfully!"],
+          })
+        );
         setIsSubmitted(true);
         clearForm();
       }
     } catch (error) {
-      dispatch(openModal({
-        title: 'Error',
-        content: 'There was an error submitting your request. Please try again later.',
-      }));
+      dispatch(
+        openModal({
+          title: "Error",
+          content:
+            "There was an error submitting your request. Please try again later.",
+        })
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -57,9 +60,9 @@ function DiscountForm() {
   const isFormValid = () => isNameValid() && isPhoneValid() && isEmailValid();
 
   const clearForm = () => {
-    setName('');
-    setPhone('');
-    setEmail('');
+    setName("");
+    setPhone("");
+    setEmail("");
   };
 
   const handleCloseModal = () => {
@@ -73,7 +76,11 @@ function DiscountForm() {
         <h2>5% off on the first order</h2>
         <div className={styles.formContainer}>
           <div className={styles.imageContainer}>
-            <img src={discountImage} alt="Discount" className={styles.discountImage} />
+            <img
+              src={discountImage}
+              alt="Discount"
+              className={styles.discountImage}
+            />
           </div>
           <div className={styles.formContent}>
             <form onSubmit={handleSubmit} className={styles.formGroupBox}>
@@ -87,7 +94,8 @@ function DiscountForm() {
                     required
                     aria-invalid={!isNameValid()}
                   />
-                  {!isNameValid() && <div className={styles.tooltip}></div>} {/* Only letters are allowed. */}
+                  {!isNameValid() && <div className={styles.tooltip}></div>}{" "}
+                  {/* Only letters are allowed. */}
                 </label>
               </div>
               <div className={styles.formGroup}>
@@ -100,7 +108,8 @@ function DiscountForm() {
                     required
                     aria-invalid={!isPhoneValid()}
                   />
-                  {!isPhoneValid() && <div className={styles.tooltip}></div>} {/* Only digits are allowed. Enter 10-15 digits. */}
+                  {!isPhoneValid() && <div className={styles.tooltip}></div>}{" "}
+                  {/* Only digits are allowed. Enter 10-15 digits. */}
                 </label>
               </div>
               <div className={styles.formGroup}>
@@ -113,7 +122,8 @@ function DiscountForm() {
                     required
                     aria-invalid={!isEmailValid()}
                   />
-                  {!isEmailValid() && <div className={styles.tooltip}></div>} {/* Enter a valid email address. */}
+                  {!isEmailValid() && <div className={styles.tooltip}></div>}{" "}
+                  {/* Enter a valid email address. */}
                 </label>
               </div>
               <GetDiscountButton

@@ -2,7 +2,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
 import ProductCard from "../../../components/ProductCard/ProductCard";
 import Filter from "../../../components/FilterContainer/Filter/Filter";
 import DiscountedItems from "../../../components/FilterContainer/DiscountedItems/DiscountedItems";
@@ -14,7 +14,9 @@ function ProductsByCategoryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categoryName, setCategoryName] = useState("");
-  const [sortType, setSortType] = useState(searchParams.get("sortType") || "default");
+  const [sortType, setSortType] = useState(
+    searchParams.get("sortType") || "default"
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,7 +26,9 @@ function ProductsByCategoryPage() {
       setError(null);
 
       try {
-        const response = await axios.get(`https://pet-shop-backend.slavab.kz/categories/${categoryId}`);
+        const response = await axios.get(
+          `localhost:3333/categories/${categoryId}`
+        );
         if (response.status === 200) {
           setProducts(response.data.data);
           setCategoryName(response.data.category.title);
@@ -68,36 +72,54 @@ function ProductsByCategoryPage() {
     });
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return (
-    <div style={{
-      color: 'red',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginTop: '50px'
-    }}>
-      {error}
-    </div>
-  );
+  if (error)
+    return (
+      <div
+        style={{
+          color: "red",
+          fontWeight: "bold",
+          textAlign: "center",
+          marginTop: "50px",
+        }}
+      >
+        {error}
+      </div>
+    );
 
   return (
     <div className="globalContainer">
       <div className={styles.productsByCategoryPage}>
         <Breadcrumbs
           items={[
-            { path: '/', label: 'Main page' },
-            { path: '/categories', label: 'Categories' },
-            { path: `/categories/${categoryId}`, label: categoryName, isActive: true }
+            { path: "/", label: "Main page" },
+            { path: "/categories", label: "Categories" },
+            {
+              path: `/categories/${categoryId}`,
+              label: categoryName,
+              isActive: true,
+            },
           ]}
         />
         <div className={styles.categoryPageTitle}>
           <h2>{categoryName}</h2>
         </div>
         <div className={styles.filterContainer}>
-          <Filter searchParams={searchParams} setSearchParams={setSearchParams} />
-          <DiscountedItems searchParams={searchParams} setSearchParams={setSearchParams} />
+          <Filter
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
+          <DiscountedItems
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
           <div className={styles.selectSort}>
             <span className={styles.sortTitle}>Sorted</span>
-            <SelectSort sortType={sortType} setSortType={setSortType} searchParams={searchParams} setSearchParams={setSearchParams} />
+            <SelectSort
+              sortType={sortType}
+              setSortType={setSortType}
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+            />
           </div>
         </div>
         <div className={styles.productsContainer}>

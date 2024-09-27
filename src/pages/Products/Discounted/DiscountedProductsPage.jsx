@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 
-import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
-import ProductCard from '../../../components/ProductCard/ProductCard';
-import Filter from '../../../components/FilterContainer/Filter/Filter';
-import SelectSort from '../../../components/FilterContainer/SelectSort/SelectSort';
-import styles from './DiscountedProductsPage.module.css';
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
+import ProductCard from "../../../components/ProductCard/ProductCard";
+import Filter from "../../../components/FilterContainer/Filter/Filter";
+import SelectSort from "../../../components/FilterContainer/SelectSort/SelectSort";
+import styles from "./DiscountedProductsPage.module.css";
 
 const DiscountedProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [sortType, setSortType] = useState(searchParams.get("sortType") || "default");
+  const [sortType, setSortType] = useState(
+    searchParams.get("sortType") || "default"
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -22,12 +24,16 @@ const DiscountedProductsPage = () => {
       setError(null);
 
       try {
-        const response = await axios.get('https://pet-shop-backend.slavab.kz/products/all');
-        const discountedProducts = response.data.filter(product => product.discont_price);
+        const response = await axios.get("localhost:3333/products/all");
+        const discountedProducts = response.data.filter(
+          (product) => product.discont_price
+        );
         setProducts(discountedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
-        setError("An error occurred while fetching products. Please try again later.");
+        setError(
+          "An error occurred while fetching products. Please try again later."
+        );
       } finally {
         setIsLoading(false);
       }
@@ -42,7 +48,7 @@ const DiscountedProductsPage = () => {
       const maxPrice = parseFloat(searchParams.get("maxPrice") || Infinity);
       const includeDiscount = searchParams.get("includeDiscount") === "true";
 
-      const filtered = products.filter(product => {
+      const filtered = products.filter((product) => {
         const productPrice = product.discont_price || product.price;
         if (productPrice < minPrice || productPrice > maxPrice) return false;
         if (includeDiscount && !product.discont_price) return false;
@@ -69,34 +75,45 @@ const DiscountedProductsPage = () => {
   }, [products, searchParams, sortType]);
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return (
-    <div style={{
-      color: 'red',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginTop: '50px'
-    }}>
-      {error}
-    </div>
-  );
+  if (error)
+    return (
+      <div
+        style={{
+          color: "red",
+          fontWeight: "bold",
+          textAlign: "center",
+          marginTop: "50px",
+        }}
+      >
+        {error}
+      </div>
+    );
 
   return (
     <div className="globalContainer">
       <div className={styles.discountedProductsPage}>
         <Breadcrumbs
           items={[
-            { path: '/', label: 'Main page' },
-            { path: '/categories', label: 'Discounted items', isActive: true }
+            { path: "/", label: "Main page" },
+            { path: "/categories", label: "Discounted items", isActive: true },
           ]}
         />
         <div className={styles.pageTitle}>
           <h2>Discounted items</h2>
         </div>
         <div className={styles.filterContainer}>
-          <Filter searchParams={searchParams} setSearchParams={setSearchParams} />
+          <Filter
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
           <div className={styles.selectSort}>
             <span className={styles.sortTitle}>Sorted by</span>
-            <SelectSort sortType={sortType} setSortType={setSortType} searchParams={searchParams} setSearchParams={setSearchParams} />
+            <SelectSort
+              sortType={sortType}
+              setSortType={setSortType}
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+            />
           </div>
         </div>
         <div className={styles.productsContainer}>
