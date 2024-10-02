@@ -27,7 +27,7 @@ function ProductsByCategoryPage() {
 
       try {
         const response = await axios.get(
-          `localhost:3333/categories/${categoryId}`
+          `http://localhost:3333/categories/${categoryId}`
         );
         if (response.status === 200) {
           setProducts(response.data.data);

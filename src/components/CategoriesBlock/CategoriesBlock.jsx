@@ -9,7 +9,7 @@ const CategoriesBlock = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("localhost:3333/products/all");
+        const response = await axios.get("http://localhost:3333/products/all");
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -38,7 +38,7 @@ const CategoriesBlock = () => {
                 className={styles.categoryItem}
               >
                 <img
-                  src={`localhost:3333/${category.image}`}
+                  src={`http://localhost:3333/${category.image}`}
                   alt={category.title}
                   className={styles.categoryImage}
                 />

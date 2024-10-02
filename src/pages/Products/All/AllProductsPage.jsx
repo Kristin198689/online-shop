@@ -24,7 +24,7 @@ function AllProductsPage() {
       setError(null);
 
       try {
-        const response = await axios.get("localhost:3333/products/all");
+        const response = await axios.get("http://localhost:3333/products/all");
         setProducts(response.data);
       } catch (error) {
         console.error(error);

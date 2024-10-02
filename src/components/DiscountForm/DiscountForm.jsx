@@ -24,7 +24,7 @@ function DiscountForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("localhost:3333/sale/send", {
+      const response = await axios.post("http://localhost:3333/sale/send", {
         name,
         phone,
         email,

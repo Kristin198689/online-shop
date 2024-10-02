@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
     <li className={styles.productCard}>
       <div className={styles.productImageContainer}>
         <img
-          src={`localhost:3333/${product.image}`}
+          src={`http://localhost:3333/${product.image}`}
           alt={product.title}
           className={styles.productImage}
         />

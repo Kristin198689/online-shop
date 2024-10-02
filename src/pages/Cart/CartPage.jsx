@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
-import { openModal, closeModal } from '../../redux/modalSlice';
-import { removeItem, clearCart, updateQuantity } from '../../redux/cartSlice';
-import Counter from '../../components/Counter/Counter';
-import OrderButton from '../../components/Buttons/OrderButton/OrderButton';
-import styles from './CartPage.module.css';
+import { openModal, closeModal } from "../../redux/modalSlice";
+import { removeItem, clearCart, updateQuantity } from "../../redux/cartSlice";
+import Counter from "../../components/Counter/Counter";
+import OrderButton from "../../components/Buttons/OrderButton/OrderButton";
+import styles from "./CartPage.module.css";
 
-const API_URL = "https://pet-shop-backend.slavab.kz";
+const API_URL = "http://localhost:3333";
 
 function CartPage() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
-  const [form, setForm] = useState({ name: '', phone: '', email: '' });
+  const [form, setForm] = useState({ name: "", phone: "", email: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState(null);
@@ -26,15 +26,19 @@ function CartPage() {
     }
   }, [isSubmitted]);
 
-  const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const totalQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
   const totalPrice = cartItems.reduce(
     (total, item) => total + (item.discont_price || item.price) * item.quantity,
     0
   );
 
-  const formatPrice = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
-    totalPrice
-  );
+  const formatPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(totalPrice);
 
   const handleQuantityChange = (id, newQuantity) => {
     dispatch(updateQuantity({ id, quantity: newQuantity }));
@@ -72,21 +76,23 @@ function CartPage() {
     try {
       await axios.post(`${API_URL}/order/send`, orderData, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
-      dispatch(openModal({
-        title: 'Congratulations!',
-        content: [
-          'Your order has been successfully placed on the website.'
-        ],
-      }));
+      dispatch(
+        openModal({
+          title: "Congratulations!",
+          content: ["Your order has been successfully placed on the website."],
+        })
+      );
 
       setIsSubmitted(true);
     } catch (error) {
-      console.error('Error placing order', error);
-      setError("An error occurred while placing your order. Please try again later.");
+      console.error("Error placing order", error);
+      setError(
+        "An error occurred while placing your order. Please try again later."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -98,7 +104,7 @@ function CartPage() {
   };
 
   const clearForm = () => {
-    setForm({ name: '', phone: '', email: '' });
+    setForm({ name: "", phone: "", email: "" });
     dispatch(clearCart());
   };
 
@@ -108,34 +114,40 @@ function CartPage() {
 
   const isFormValid = () => isNameValid() && isPhoneValid() && isEmailValid();
 
-  if (error) return (
-    <div style={{
-      color: 'red',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginTop: '50px'
-    }}>
-      {error}
-    </div>
-  );
+  if (error)
+    return (
+      <div
+        style={{
+          color: "red",
+          fontWeight: "bold",
+          textAlign: "center",
+          marginTop: "50px",
+        }}
+      >
+        {error}
+      </div>
+    );
 
-  if (cartItems.length === 0) return (
-    <div className="globalContainer">
-      <div className={styles.cartPageBlock}>
-        <div className="titleBlock">
-          <h2>Shopping cart</h2>
-          <div className="titleBlockLine"></div>
-          <Link to="/products" className="titleBlockButton">
-            Back to the store
-          </Link>
-        </div>
-        <div className={styles.emptyCart}>
-          <p>Looks like you have no items in your basket currently.</p>
-          <Link to="/products" className={styles.continueShoppingButton}>Continue Shopping</Link>
+  if (cartItems.length === 0)
+    return (
+      <div className="globalContainer">
+        <div className={styles.cartPageBlock}>
+          <div className="titleBlock">
+            <h2>Shopping cart</h2>
+            <div className="titleBlockLine"></div>
+            <Link to="/products" className="titleBlockButton">
+              Back to the store
+            </Link>
+          </div>
+          <div className={styles.emptyCart}>
+            <p>Looks like you have no items in your basket currently.</p>
+            <Link to="/products" className={styles.continueShoppingButton}>
+              Continue Shopping
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 
   return (
     <div className="globalContainer">
@@ -154,34 +166,67 @@ function CartPage() {
               {cartItems.map((item) => (
                 <div key={item.id} className={styles.cartItem}>
                   <div className={styles.productImageContainer}>
-                    <img src={`${API_URL}${item.image}`} alt={item.title} className={styles.productImage} />
+                    <img
+                      src={`${API_URL}${item.image}`}
+                      alt={item.title}
+                      className={styles.productImage}
+                    />
                   </div>
                   <div className={styles.cartItemDetails}>
-                    <h3 className={styles.cartItemTitle} title={item.title}>{item.title}</h3>
+                    <h3 className={styles.cartItemTitle} title={item.title}>
+                      {item.title}
+                    </h3>
                     <div className={styles.cartItemPrice}>
                       <div className={styles.cartItemCounter}>
                         <Counter
                           quantity={item.quantity}
-                          setQuantity={(newQuantity) => handleQuantityChange(item.id, newQuantity)}
+                          setQuantity={(newQuantity) =>
+                            handleQuantityChange(item.id, newQuantity)
+                          }
                         />
                       </div>
                       <div className={styles.priceBox}>
                         {item.discont_price ? (
                           <>
-                            <p className={styles.discountPrice}>${(item.discont_price * item.quantity)}</p>
-                            <p className={styles.originalPrice}>${(item.price * item.quantity)}</p>
+                            <p className={styles.discountPrice}>
+                              ${item.discont_price * item.quantity}
+                            </p>
+                            <p className={styles.originalPrice}>
+                              ${item.price * item.quantity}
+                            </p>
                           </>
                         ) : (
-                          <p className={styles.originalPriceLarge}>${(item.price * item.quantity)}</p>
+                          <p className={styles.originalPriceLarge}>
+                            ${item.price * item.quantity}
+                          </p>
                         )}
                       </div>
                     </div>
                     <button
                       className={styles.removeButton}
-                      onClick={() => dispatch(removeItem({ id: item.id }))}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 6L6 18" stroke="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M6 6L18 18" stroke="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      onClick={() => dispatch(removeItem({ id: item.id }))}
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M18 6L6 18"
+                          stroke="none"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M6 6L18 18"
+                          stroke="none"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -203,7 +248,10 @@ function CartPage() {
               </div>
 
               <div className={styles.formContent}>
-                <form onSubmit={handlePlaceOrder} className={styles.formGroupBox}>
+                <form
+                  onSubmit={handlePlaceOrder}
+                  className={styles.formGroupBox}
+                >
                   <div className={styles.formGroup}>
                     <label>
                       <input
@@ -215,7 +263,8 @@ function CartPage() {
                         required
                         aria-invalid={!isNameValid()}
                       />
-                      {!isNameValid() && <div className={styles.tooltip}></div>} {/* Only letters are allowed. */}
+                      {!isNameValid() && <div className={styles.tooltip}></div>}{" "}
+                      {/* Only letters are allowed. */}
                     </label>
                   </div>
                   <div className={styles.formGroup}>
@@ -229,7 +278,10 @@ function CartPage() {
                         required
                         aria-invalid={!isPhoneValid()}
                       />
-                      {!isPhoneValid() && <div className={styles.tooltip}></div>} {/* Only digits are allowed. Enter 10-15 digits. */}
+                      {!isPhoneValid() && (
+                        <div className={styles.tooltip}></div>
+                      )}{" "}
+                      {/* Only digits are allowed. Enter 10-15 digits. */}
                     </label>
                   </div>
                   <div className={styles.formGroup}>
@@ -243,7 +295,10 @@ function CartPage() {
                         required
                         aria-invalid={!isEmailValid()}
                       />
-                      {!isEmailValid() && <div className={styles.tooltip}></div>} {/* Enter a valid email address. */}
+                      {!isEmailValid() && (
+                        <div className={styles.tooltip}></div>
+                      )}{" "}
+                      {/* Enter a valid email address. */}
                     </label>
                   </div>
                 </form>
